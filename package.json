@@ -5,12 +5,25 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "db:upgrade": "knex migrate:latest --env production",
+    "db:upgrade:staging": "knex migrate:latest --env staging",
+    "db:upgrade:dev": "knex migrate:latest",
+    "db:upgrade:next": "knex migrate:up --env production",
+    "db:upgrade:next:staging": "knex migrate:up --env staging",
+    "db:upgrade:next:dev": "knex migrate:up",
+    "db:rollback": "knex migrate:rollback --all --env production",
+    "db:rollback:staging": "knex migrate:rollback --all --env staging",
+    "db:rollback:dev": "knex migrate:rollback --all",
+    "db:rollback:last": "knex migrate:down --env production",
+    "db:rollback:last:staging": "knex migrate:down --env staging",
+    "db:rollback:last:dev": "knex migrate:down"
   },
   "dependencies": {
+    "dotenv": "^8.2.0",
     "knex": "^0.21.1",
-    "mysql": "^2.18.1",
     "next": "9.4.2",
+    "pg": "^8.2.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "sqlite3": "^4.2.0"

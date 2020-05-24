@@ -1,8 +1,12 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import * as api from '../../api';
+import { newApi } from '../../api';
+import { newConfig } from '../../config';
+
+const config = newConfig(process.env);
+const api = newApi(config);
 
 export default async (req, res) => {
-  const data = await api.hello()
+  const result = await api.hello();
   res.statusCode = 200;
-  res.json(data);
+  res.json(result);
 }
