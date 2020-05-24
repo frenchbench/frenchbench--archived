@@ -126,3 +126,6 @@ dist
 
 # project info
 .idea/
+
+# temp folder
+/tmp/
