@@ -1,6 +1,14 @@
 # frenchbench-app
-FrenchBench intelligent team builder App and API using Node.js, React.js, Next.js, MySQL
-
+FrenchBench intelligent team builder App and API using:
+* Node.js v12
+* React.js
+* Next.js
+* Knex.js
+* PostgreSQL v12
+* SQLite3
+* Bcrypt
+* Dotenv
+* UUID
 
 ## Installation
 
