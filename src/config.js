@@ -82,6 +82,12 @@ function newConfig(env) {
   return {
     httpConfig,
     dbConfig,
+    registration: {
+      secretPattern: 'AB12CD',
+      passwordPattern: [
+
+      ],
+    },
   };
 }
 
