@@ -2,10 +2,10 @@ const tableName = 'user_profile';
 
 exports.up = (knex) => {
   return knex.schema.createTable(tableName, (table) => {
-    table.uuid('id').primary()
+    table.uuid('id').notNullable().primary()
       .references('id').inTable('entity')
       .onDelete('cascade');
-    table.uuid('user_id').index()
+    table.uuid('user_id').notNullable().index()
       .references('id').inTable('user')
       .onDelete('cascade');
     table.string('first_name', 50).nullable();

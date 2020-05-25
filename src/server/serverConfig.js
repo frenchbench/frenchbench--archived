@@ -82,11 +82,19 @@ function newConfig(env) {
   return {
     httpConfig,
     dbConfig,
-    registration: {
-      secretPattern: 'AB12CD',
-      passwordPattern: [
-
+    security: {
+      secretPattern: 'AB12CD', // a secret to be emailed
+      passwordPatterns: [
+        /[A-Z]+/,
+        /[a-z]+/,
+        /[0-9]+/,
+        /[\+\-\*\=\,\.\;\:\'\"\<\>\[\]\{\}\(\)\@\#\$\£\€\!]+/,
+        /.{10,}/,
       ],
+      tokens: {
+        signKey: env.SECURITY_TOKENS_SIGN_KEY,
+        expiry: env.SECURITY_TOKEN_EXPIRY || '1h',
+      },
     },
   };
 }

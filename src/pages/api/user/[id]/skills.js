@@ -1,5 +1,5 @@
-import { newApi } from '../../../server/api';
-import { ERRORS } from '../../../server/constants';
+import { newApi } from '../../../../server/api';
+import { ERRORS } from '../../../../server/constants';
 
 const api = newApi(process.env);
 
@@ -9,9 +9,8 @@ export default async (req, res) => {
   switch (method) {
     case 'GET':
       const { id } = query;
-      const data = await api.userRetrieve(id);
+      const data = await api.userSkillsRetrieve({ where: 'user_id = ?', params: [id] });
       if (data) {
-        delete data.password_hash;
         res.status(200).json({ data });
       } else {
         res.status(404).json({ error: ERRORS.RECORD_NOT_FOUND });

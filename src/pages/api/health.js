@@ -1,8 +1,6 @@
-import { newApi } from '../../api';
-import { newConfig } from '../../config';
+import { newApi } from '../../server/api';
 
-const config = newConfig(process.env);
-const api = newApi(config);
+const api = newApi(process.env);
 
 export default async (req, res) => {
   const result = await api.health();

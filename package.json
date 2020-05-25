@@ -17,12 +17,14 @@
     "db:rollback:dev": "knex migrate:rollback --all",
     "db:rollback:last": "knex migrate:down --env production",
     "db:rollback:last:staging": "knex migrate:down --env staging",
-    "db:rollback:last:dev": "knex migrate:down"
+    "db:rollback:last:dev": "knex migrate:down",
+    "db:seed:dev": "knex seed:run"
   },
   "dependencies": {
     "bcrypt": "^4.0.1",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
+    "jsonwebtoken": "^8.5.1",
     "knex": "^0.21.1",
     "next": "9.4.2",
     "pg": "^8.2.1",
@@ -30,5 +32,8 @@
     "react-dom": "16.13.1",
     "sqlite3": "^4.2.0",
     "uuid": "^8.1.0"
+  },
+  "devDependencies": {
+    "faker": "^4.1.0"
   }
 }

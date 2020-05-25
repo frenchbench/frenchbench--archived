@@ -1,8 +1,6 @@
-import { newApi } from '../../api';
-import { newConfig } from '../../config';
+import { newApi } from '../../server/api';
 
-const config = newConfig(process.env);
-const api = newApi(config);
+const api = newApi(process.env);
 
 export default async (req, res) => {
   const { method, body } = req;
@@ -18,6 +16,7 @@ export default async (req, res) => {
       }
       break;
     default:
-      res.status(400).json({ error: 'bad request' });
+      res.setHeader('Allow', ['POST']);
+      res.status(405).end(`Method ${method} Not Allowed`);
   }
 }

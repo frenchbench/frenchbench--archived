@@ -1,15 +1,15 @@
-const tableName = 'asset';
+const tableName = 'entity_asset';
 
 exports.up = (knex) => {
   return knex.schema.createTable(tableName, (table) => {
-    table.uuid('id').notNullable().primary()
+    table.uuid('parent_entity_id').notNullable().index()
       .references('id').inTable('entity')
       .onDelete('cascade');
-    table.string('asset_type', 50).notNullable();
-    table.string('media_type', 50).notNullable();
-    table.string('label', 50).nullable();
-    table.string('url', 255).notNullable();
+    table.uuid('asset_id').notNullable().index()
+      .references('id').inTable('asset')
+      .onDelete('cascade');
     table.jsonb('meta').notNullable().defaultTo('{}');
+    table.primary(['parent_entity_id', 'asset_id']);
   });
 };
 
