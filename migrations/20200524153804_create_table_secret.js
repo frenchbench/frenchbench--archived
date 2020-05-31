@@ -1,4 +1,4 @@
-const tableName = 'secret';
+const tableName = 'tbl_secret';
 
 exports.up = (knex) => {
   return knex.schema.createTable(tableName, (table) => {
@@ -6,6 +6,7 @@ exports.up = (knex) => {
     table.timestamp('created_at', { useTz: true, precision: 3 }).notNullable();
     table.string('secret', 20).notNullable();
     table.string('email', 100).notNullable();
+    table.jsonb('meta').notNullable().defaultTo('{}');
   });
 };
 

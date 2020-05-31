@@ -1,11 +1,13 @@
-const tableName = 'tbl_user';
+const tableName = 'tbl_asset';
 
 exports.up = (knex) => {
   return knex.schema.createTable(tableName, (table) => {
     table.uuid('id').notNullable().primary();
-    table.string('username', 50).notNullable().unique();
-    table.string('email', 100).notNullable().unique();
-    table.text('password_hash').notNullable();
+    table.string('asset_type', 50).notNullable();
+    table.string('media_type', 50).notNullable();
+    table.string('label', 50).nullable();
+    table.string('url', 255).notNullable();
+    table.jsonb('meta').notNullable().defaultTo('{}');
 
     table.timestamp('created_at', { useTz: true }).notNullable();
     table.timestamp('updated_at', { useTz: true }).notNullable();

@@ -1,7 +1,22 @@
 const faker = require('faker');
-const lib = require('./src/common/lib');
-const { tables } = require('./src/server/constants');
-const { passwordHash } = require('./src/server/utils');
+const bcrypt = require('bcrypt');
+
+async function passwordHash(password, saltRounds = 10) {
+  return bcrypt.hash(password, saltRounds);
+}
+function nowStr() {
+  return (new Date()).toISOString();
+}
+function randNum(max, min = 0) {
+  return min + Math.floor(Math.random() * max);
+}
+function chainPromises(items, fn) {
+  return items.reduce((promise, item) => {
+    return promise.then(() => {
+      return fn(item);
+    });
+  }, Promise.resolve());
+}
 
 const skills = [
   'Application Development',
@@ -95,63 +110,60 @@ const skillCount = skills.length;
 const stars = [1, 2, 3, 4, 5];
 const starCount = stars.length;
 
-function newEntity(kind, extras = {}){
-  const { created_by = null, updated_by = null } = extras;
+function randUserSkill(user, { order_idx }){
   const id = faker.random.uuid();
   return {
     id,
-    kind,
-    created_at: lib.nowStr(),
-    updated_at: lib.nowStr(),
-    created_by,
-    updated_by,
+    user_id: user.id,
+    skill: skills[randNum(skillCount)],
+    stars: stars[randNum(starCount)],
+    order_idx,
+    created_at: nowStr(),
+    updated_at: nowStr(),
+    created_by: user.id,
+    updated_by: user.id,
   }
 }
 
-function randUserSkill(user, { order_idx }){
-  const userSkillEntity = newEntity(tables.userSkill.name);
-  userSkillEntity.created_by = user.id;
-  userSkillEntity.updated_by = user.id;
-  const userSkill = {
-    id: userSkillEntity.id,
-    user_id: user.id,
-    skill: skills[lib.randIdx(skillCount)],
-    stars: stars[lib.randIdx(starCount)],
-    order_idx,
-  }
+function randUserPost(user){
+  const id = faker.random.uuid();
+  const title = faker.lorem.sentence();
   return {
-    userSkillEntity,
-    userSkill,
+    id,
+    user_id: user.id,
+    title,
+    post_ref: title.replace(' ', '-').toLowerCase(),
+    summary: faker.lorem.sentences(),
+    content: faker.lorem.paragraph() + '\n\n' + faker.lorem.paragraph() + '\n\n' + faker.lorem.paragraph(),
+    created_at: nowStr(),
+    updated_at: nowStr(),
+    created_by: user.id,
+    updated_by: user.id,
   }
 }
 
 async function randUser(){
-  const userEntity = newEntity(tables.user.name, {});
-  userEntity.created_by = userEntity.id;
-  userEntity.updated_by = userEntity.id;
+  const id = faker.random.uuid();
   const username = faker.internet.userName().toLowerCase();
   const password_hash = await passwordHash(faker.internet.password());
-  const user = {
-    id: userEntity.id,
+  return {
+    id,
     email: faker.internet.email(),
     username,
     password_hash,
-  };
-  //const userSkills = [...Array(lib.randIdx(20, 5))].map((_, order_idx) => {
-  //  return randUserSkill(user, { order_idx });
-  //});
-
-  return {
-    userEntity,
-    user,
-    //userSkills,
-  };
+    created_at: nowStr(),
+    updated_at: nowStr(),
+    created_by: id,
+    updated_by: id,
+  }
 }
 
 module.exports = {
   skills,
   stars,
-  newEntity,
   randUserSkill,
+  randUserPost,
   randUser,
+  randNum,
+  chainPromises,
 };
