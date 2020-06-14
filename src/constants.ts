@@ -23,5 +23,7 @@ export const tables = {
   userSkill:        { name: 'tbl_user_skill', pkey: ['id'] },
   asset:            { name: 'tbl_asset', pkey: ['id'] },
   entityAsset:      { name: 'tbl_entity_asset', pkey: ['parent_entity_id', 'asset_id'] },
-  sysLookup:        { name: 'tbl_sys_lookup', pkey: ['category', 'id' ]},
+  sysLookup:        { name: 'tbl_sys_lookup', pkey: ['category', 'id'] },
+  authConsent:      { name: 'tbl_auth_consent', pkey: ['id'] },
+  authIdentity:     { name: 'tbl_auth_identity', pkey: ['id'] },
 };

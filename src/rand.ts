@@ -39,3 +39,13 @@ export function randSecret(pattern = 'AB12CD'){
   //return randChars(2) + randNums(2) + randChars(2);
   return result;
 }
+
+export function randString(length = 20) {
+  let result = '', j = 0;
+  for (let i = 0; i < length; i++) {
+    j = randIdx(2);
+    if (j === 0) result += randNums(1);
+    if (j === 1) result += randChars(1);
+  }
+  return result;
+}

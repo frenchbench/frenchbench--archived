@@ -118,5 +118,7 @@ export function newDb(dbConfig: IDbConfig) {
     lookupRepo:          makeBasicRepo(tables.sysLookup),
     assetRepo:           makeBasicRepo(tables.asset),
     entityAssetRepo:     makeBasicRepo(tables.entityAsset),
+    authConsentRepo:     makeBasicRepo(tables.authConsent),
+    authIdentityRepo:    makeBasicRepo(tables.authIdentity),
   };
 }

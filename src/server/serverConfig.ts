@@ -28,6 +28,20 @@ export interface IProcessEnv {
   SECURITY_TOKENS_SIGN_KEY?: string; // random string
   SECURITY_TOKENS_EXPIRY?: string; // e.g. '1h'
 
+  // for storage - aws s3
+  AWS_S3_CLIENT_ID?: string;
+  AWS_S3_CLIENT_SECRET?: string;
+
+  // for identity provider - github
+  GITHUB_CLIENT_ID?: string;
+  GITHUB_CLIENT_SECRET?: string;
+  GITHUB_REDIRECT_URI?: string;
+
+  // for identity provider - github
+  LINKEDIN_CLIENT_ID?: string;
+  LINKEDIN_CLIENT_SECRET?: string;
+  LINKEDIN_REDIRECT_URI?: string;
+
 }
 
 export interface IHttpConfig {
@@ -112,12 +126,28 @@ function newDbConfig(env: IProcessEnv): IDbConfig {
   };
 }
 
+export interface IAuthProviderBase {
+  authUrl: string; // provider's url to init authorize
+  accessTokenUrl: string; // provider's url to create access token
+  apiBaseUrl: string; // provider's url to make API calls
+  clientId: string;
+  clientSecret: string;
+  redirectUri: string;
+  scope: string;
+}
+export type IAuthProviderGithub   = IAuthProviderBase;
+export type IAuthProviderLinkedIn = IAuthProviderBase;
+
 export interface ISecurityConfig {
   secretPattern: string;
   passwordPatterns: Array<RegExp>;
   tokens: {
     signKey: string;
     expiry: string;
+  },
+  authProviders: {
+    github: IAuthProviderGithub;
+    linkedin: IAuthProviderLinkedIn;
   }
 }
 
@@ -135,6 +165,26 @@ export function newSecurityConfig(env: IProcessEnv): ISecurityConfig {
       signKey: env.SECURITY_TOKENS_SIGN_KEY || '', // TODO warning
       expiry: env.SECURITY_TOKENS_EXPIRY || '1h',
     },
+    authProviders: {
+      github: {
+        authUrl: 'https://github.com/login/oauth/authorize',
+        accessTokenUrl: 'https://github.com/login/oauth/access_token',
+        apiBaseUrl: 'https://api.github.com',
+        clientId: env.GITHUB_CLIENT_ID || '', // TODO: warning
+        clientSecret: env.GITHUB_CLIENT_SECRET || '', // TODO: warning
+        redirectUri: env.GITHUB_REDIRECT_URI || '', // TODO: warning
+        scope: 'profile',
+      },
+      linkedin: {
+        authUrl: 'https://www.linkedin.com/oauth/v2/authorization',
+        accessTokenUrl: 'https://www.linkedin.com/oauth/v2/access_token',
+        apiBaseUrl: 'https://api.linkedin.com/v2',
+        clientId: env.LINKEDIN_CLIENT_ID || '', // TODO: warning
+        clientSecret: env.LINKEDIN_CLIENT_SECRET || '', // TODO: warning
+        redirectUri: env.LINKEDIN_REDIRECT_URI || '', // TODO: warning
+        scope: 'r_basicprofile',// 'r_liteprofile',
+      }
+    }
   }
 }
 

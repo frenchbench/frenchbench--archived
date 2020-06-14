@@ -2,9 +2,11 @@ import { newUuid } from '../uuid';
 import { newDb } from './db';
 import { ERRORS } from '../constants';
 import { nowStr } from '../date';
-import { randSecret } from '../rand';
+import { randSecret, randString } from '../rand';
 import { newConfig } from './serverConfig';
 import { passwordHash, tokenCreate, passwordVerify } from './security';
+import { newGithub } from './auth/github';
+import { newLinkedIn } from './auth/linkedin';
 
 export function newApi(env: any) {
   const config = newConfig(env);
@@ -95,7 +97,7 @@ export function newApi(env: any) {
     }
 
     const password_hash = await passwordHash(password);
-    const userId = newUuid;
+    const userId = newUuid();
     const userRow = {
       id: userId,
       email,
@@ -158,7 +160,59 @@ export function newApi(env: any) {
     return db.entityAssetRepo.retrieve(args);
   }
 
+  const github   = newGithub(config.security.authProviders.github);
+  const linkedin = newLinkedIn(config.security.authProviders.linkedin);
+
+  const authProviders = {
+    github,
+    linkedin,
+  };
+
+  const auth = {
+    authProviders,
+    getAuthUrl: async (providerId: string) => {
+      const providerConfig = config.security.authProviders[providerId];
+      const provider = authProviders[providerId];
+      const state = newUuid();
+      const scope = providerConfig.scope;
+      const response_type = 'code';
+      const result = await db.authConsentRepo.create({
+        id: state,
+        scope,
+        provider_id: providerId,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      });
+      console.log('Api.getAuthUrl authConsentRepo.create', result);
+      const url = provider.getAuthorizeUrl({ state, scope, response_type });
+      return url;
+    },
+    createAccessToken: async(providerId: string, { state, code }) => {
+      const options = { where: 'id = ?', params: [state] };
+      const modifications = {
+        updated_at: new Date().toISOString(),
+        auth_code: code,
+      };
+      const result = await db.authConsentRepo.update(modifications, options);
+      console.log('Api.createAccessToken db.authConsentRepo.update', result);
+      const providerConfig = config.security.authProviders[providerId];
+      const provider = authProviders[providerId];
+      const { access_token, token_type } = provider.createAccessToken({ state, code });
+
+      const modifications2 = {
+        updated_at: new Date().toISOString(),
+        token_type,
+        access_token,
+      };
+      const result2 = await db.authConsentRepo.update(modifications2, options);
+      console.log('Api.createAccessToken db.authConsentRepo.update', result2);
+
+      return { access_token, token_type };
+    }
+  }
+
   return {
+    auth,
     db,
     health,
     sendSecret,
