@@ -1,13 +1,13 @@
-const tableName = 'user_profile';
+const tableName = 'tbl_user_profile';
 
 exports.up = (knex) => {
   return knex.schema.createTable(tableName, (table) => {
-    table.uuid('id').primary()
-      .references('id').inTable('entity')
-      .onDelete('cascade');
-    table.uuid('user_id').index()
+    table.uuid('id').notNullable().primary();
+
+    table.uuid('user_id').notNullable().index()
       .references('id').inTable('user')
       .onDelete('cascade');
+
     table.string('first_name', 50).nullable();
     table.string('middle_name', 50).nullable();
     table.string('last_name', 50).nullable();
@@ -19,6 +19,11 @@ exports.up = (knex) => {
     table.integer('dob_year').nullable().index();
     table.integer('min_salary').nullable().index();
     table.text('summary').nullable();
+
+    table.timestamp('created_at', { useTz: true }).notNullable();
+    table.timestamp('updated_at', { useTz: true }).notNullable();
+    table.uuid('created_by').nullable();
+    table.uuid('updated_by').nullable();
   });
 };
 
