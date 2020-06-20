@@ -1,0 +1,35 @@
+{
+  "name": "frenchbench-app",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development PORT=8080 ts-node ./src/server.ts",
+    "build": "next build",
+    "prod": "cross-env NODE_ENV=production PORT=8080 node ./dist/server.js"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "cookie": "^0.4.1",
+    "cross-env": "^7.0.2",
+    "date-fns": "^2.14.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "frenchbench-common": "^1.0.0",
+    "gray-matter": "^4.0.2",
+    "http-proxy-middleware": "^1.0.4",
+    "next": "9.4.2",
+    "next-connect": "^0.7.1",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "remark": "^12.0.0",
+    "remark-html": "^11.0.2",
+    "swr": "^0.2.3"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.6",
+    "@types/react": "^16.9.35",
+    "@types/react-dom": "^16.9.8",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.3"
+  }
+}

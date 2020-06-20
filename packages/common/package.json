@@ -1,0 +1,24 @@
+{
+  "name": "frenchbench-common",
+  "version": "1.0.0",
+  "description": "frenchbench common codebase",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "echo 'this is not a server'",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "uuid": "^8.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.6",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.3"
+  },
+  "files": [
+    "lib"
+  ],
+  "author": "",
+  "license": "ISC"
+}

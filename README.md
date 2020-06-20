@@ -1,5 +1,7 @@
 # frenchbench-app
+
 FrenchBench intelligent team builder App and API using:
+
 * Node.js v12
 * React.js
 * Next.js
@@ -13,22 +15,25 @@ FrenchBench intelligent team builder App and API using:
 ## Installation
 
 ```
-npm install
+npm i -g lerna typescript
+lerna bootstrap
 ```
 
 ## Disable telemetry for Next.js
 
 ```
+cd packages/app
 npx next telemetry disable
 ```
 
 ## Configuration
 
-Copy `.env.sample` as `.env` and edit.
+For packages/app and packages/api, copy `.env.sample` as `.env` and edit.
 
 ## In Development env
 
 ```
+cd packages/api
 # create tables
 npm run db:upgrade:dev
 
@@ -37,12 +42,20 @@ npm run db:seed:dev
 
 # start
 npm run dev
+
+cd packages/app
+npm run dev
 ```
 
 ## In Staging/test env
 
 ```
+cd packages/api
 npm run db:upgrade:staging
+npm run build
+npm run start
+
+cd packages/app
 npm run build
 npm run start
 ```
@@ -50,7 +63,12 @@ npm run start
 ## In Production env
 
 ```
+cd packages/api
 npm run db:upgrade
+npm run build
+npm run start
+
+cd packages/app
 npm run build
 npm run start
 ```
