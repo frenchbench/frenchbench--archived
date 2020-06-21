@@ -1,6 +1,10 @@
-export default function newConfig() {
-  // TODO
-  return {
+export interface IAppOptions {
 
+}
+
+export function newAppConfig(env: IAppOptions) {
+
+  return {
+    test: true,
   }
 }

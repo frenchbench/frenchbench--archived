@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "cookie": "^0.4.1",
+    "cookie-parser": "^1.4.5",
     "cross-env": "^7.0.2",
     "date-fns": "^2.14.0",
     "dotenv": "^8.2.0",
@@ -17,6 +18,7 @@
     "frenchbench-common": "^1.0.0",
     "gray-matter": "^4.0.2",
     "http-proxy-middleware": "^1.0.4",
+    "js-cookie": "^2.2.1",
     "next": "9.4.2",
     "next-connect": "^0.7.1",
     "react": "16.13.1",

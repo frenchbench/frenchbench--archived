@@ -1,22 +1,17 @@
-/* eslint-disable no-console */
+require('dotenv').config();
 const express = require('express');
 const next = require('next');
+const cookieParser = require('cookie-parser');
+const proxyMiddleware = require('http-proxy-middleware');
+const { newServerConfig } = require('./serverConfig');
 
-const devProxy = {
-  '/api': {
-    target: 'http://localhost:9090/api',
-    pathRewrite: { '^/api': '/' },
-    changeOrigin: true,
-  },
-}
+const serverConfig = newServerConfig(process.env);
+const { port, env, isDevMode, proxyConfig } = serverConfig;
 
-const port = parseInt(process.env.PORT || '8080', 10) || 8080;
-const env = process.env.NODE_ENV || 'development';
-const dev = env !== 'production';
 const app = next({
   dir: 'src', // base directory where everything is, could move to src later
-  dev,
-})
+  dev: isDevMode,
+});
 
 const handle = app.getRequestHandler();
 
@@ -26,13 +21,12 @@ app
   .then(() => {
     server = express();
 
-    // Set up the proxy.
-    if (dev && devProxy) {
-      const proxyMiddleware = require('http-proxy-middleware');
-      Object.keys(devProxy).forEach(function (context) {
-        server.use(proxyMiddleware(context, devProxy[context]));
-      });
-    }
+    server.use(cookieParser);
+
+    // attach api proxy middleware
+    Object.keys(proxyConfig).forEach(context => {
+      server.use(proxyMiddleware(context, proxyConfig[context]));
+    });
 
     // Default catch-all handler to allow Next.js to handle all other routes
     server.all('*', (req, res) => handle(req, res));

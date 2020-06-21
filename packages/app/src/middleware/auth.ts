@@ -1,6 +1,4 @@
-import nextConnect from 'next-connect'
-import passport from '../lib/passport'
-import session from '../lib/session'
+import nextConnect from 'next-connect';
 
 const auth = nextConnect()
   .use(
@@ -15,14 +13,7 @@ const auth = nextConnect()
         sameSite: 'lax',
       },
     })
-  )
-  .use((req, res, next) => {
-    // Initialize mocked database
-    // Remove this after you add your own database
-    req.session.users = req.session.users || []
-    next()
-  })
-  .use(passport.initialize())
-  .use(passport.session())
+  );
 
-export default auth
+export default auth;
+

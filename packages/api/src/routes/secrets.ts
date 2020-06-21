@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
+import { Api } from '../api';
 
-export default function (api: any, router: Router) {
+export default function (api: Api, router: Router) {
 
   router.post('/', async (req: Request, res: Response) => {
     try {

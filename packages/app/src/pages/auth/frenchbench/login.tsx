@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react';
 import Router from 'next/router';
-import Link from 'next/link';
-import { useUser } from '../../../lib/hooks';
+import { useUser } from '@app/lib/hooks';
+import { UserLoginForm } from '@app/components/UserLoginForm';
 
 export default function LoginPage() {
   const [user, { mutate }] = useUser()
   const [errorMsg, setErrorMsg] = useState('')
 
-  async function onSubmit(e) {
-    e.preventDefault()
-
+  async function onSubmit(evt) {
+    evt.preventDefault();
+    const loginForm = evt.currentTarget;
     const body = {
-      username: e.currentTarget.username.value,
-      password: e.currentTarget.password.value,
+      username: loginForm.username.value,
+      password: loginForm.password.value,
     }
     const res = await fetch('/api/login', {
       method: 'POST',
@@ -36,25 +36,12 @@ export default function LoginPage() {
 
   return (
     <>
-      <h1>Login to Example</h1>
+      <h1>Login</h1>
+
       {errorMsg && <p className="error">{errorMsg}</p>}
+
       <div className="form-container">
-        <form onSubmit={onSubmit}>
-          <label>
-            <span>Username</span>
-            <input type="text" name="username" required />
-          </label>
-          <label>
-            <span>Password</span>
-            <input type="password" name="password" required />
-          </label>
-          <div className="submit">
-            <button type="submit">Login</button>
-            <Link href="/signup">
-              <a>I don't have an account</a>
-            </Link>
-          </div>
-        </form>
+        <UserLoginForm onSubmit={onSubmit} />
       </div>
     </>
   )

@@ -1,14 +1,14 @@
 import React from 'react';
 import Head from 'next/head';
-import Layout from '../../app/Layout';
-import Date from '../../app/DateTag';
+import Layout from '../../components/Layout';
+import Date from '../../components/DateTag';
 import { getAllPageIds, getPageData } from '../../pageContent';
 import utilStyles from '../../styles/utils.module.css';
 
 export default function PageById({ pageData }) {
   const { date, title, contentHtml } = pageData;
   return (
-    <Layout>
+    <Layout home={false}>
       <Head>
         <title>{title}</title>
       </Head>

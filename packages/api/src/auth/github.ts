@@ -36,14 +36,12 @@ export function newGithub(config: any): IAuthProvider {
           }
         }
       );
-      console.log('github.createAccessToken', response);
-      const {access_token, token_type} = response.data;
-      return {access_token, token_type}; // 'bearer'
+      return response.data;
     },
 
     // step 5: get user details using access token
     getUserDetails: async (params) => {
-      const { access_token, token_type = 'bearer' } = params;
+      const { token_type = 'bearer', access_token } = params;
       const response = await axios.get<IUser>(
         config.apiBaseUrl + '/user',
         {

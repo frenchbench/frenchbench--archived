@@ -1,11 +1,15 @@
 import { newGithub } from './github';
 import { newLinkedIn } from './linkedin';
 import { newUuid } from 'frenchbench-common';
-import {IAuthProvider, IAuthProviderManager} from '../authTypes';
+import { IAuthProvider, IAuthProviderManager } from '../authTypes';
+import { getAuthProviderConfig } from '../serverConfig';
 
-export default function (db: any, config: any) {
-  const github   = newGithub(config.security.authProviders.github);
-  const linkedin = newLinkedIn(config.security.authProviders.linkedin);
+export default function (db: any, config: any): IAuthProviderManager {
+  const githubConfig = getAuthProviderConfig(config, 'github');
+  const github = newGithub(githubConfig);
+
+  const linkedinConfig = getAuthProviderConfig(config, 'linkedin');
+  const linkedin = newLinkedIn(linkedinConfig);
 
   const authProviders = {
     github,
@@ -18,14 +22,14 @@ export default function (db: any, config: any) {
     throw new Error('unknown auth provider')
   }
 
-  const auth: IAuthProviderManager = {
-    // authProviders,
-    getAuthUrl: async (providerId: string) => {
-      const providerConfig = config.security.authProviders[providerId];
+  return {
+    //authProviders,
+    getAuthorizeUrl: async (providerId, params = {}) => {
+      const providerConfig = getAuthProviderConfig(config, providerId);
       const provider = authProvider(providerId);
       const state = newUuid();
-      const scope = providerConfig.scope;
-      const response_type = 'code';
+      const { scope } = providerConfig;
+      const { response_type = 'code' } = params;
       const result = await db.authConsentRepo.create({
         id: state,
         scope,
@@ -34,9 +38,14 @@ export default function (db: any, config: any) {
         updated_at: new Date().toISOString(),
       });
       console.log('Api.getAuthUrl authConsentRepo.create', result);
-      return provider.getAuthorizeUrl({ state, scope, response_type });
+      const url = provider.getAuthorizeUrl({ state, scope, response_type });
+      return Promise.resolve(url);
     },
-    createAccessToken: async(providerId: string, { state, code }) => {
+
+    createAccessToken: async (providerId, params) => {
+      const provider = authProvider(providerId);
+
+      const { state, code } = params;
       const options = { where: 'id = ?', params: [state] };
       const modifications = {
         updated_at: new Date().toISOString(),
@@ -44,9 +53,8 @@ export default function (db: any, config: any) {
       };
       const result = await db.authConsentRepo.update(modifications, options);
       console.log('Api.createAccessToken db.authConsentRepo.update', result);
-      const providerConfig = config.security.authProviders[providerId];
-      const provider = authProviders[providerId];
-      const { access_token, token_type } = provider.createAccessToken({ state, code });
+
+      const { access_token, token_type } = await provider.createAccessToken({ state, code });
 
       const modifications2 = {
         updated_at: new Date().toISOString(),
@@ -57,8 +65,11 @@ export default function (db: any, config: any) {
       console.log('Api.createAccessToken db.authConsentRepo.update', result2);
 
       return { access_token, token_type };
-    }
-  }
+    },
 
-  return auth;
+    getUserDetails: async (providerId, params) => {
+      const provider = authProvider(providerId);
+      return provider.getUserDetails(params);
+    },
+  }
 }

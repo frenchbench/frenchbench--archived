@@ -135,8 +135,6 @@ export interface IAuthProviderBase {
   redirectUri: string;
   scope: string;
 }
-export type IAuthProviderGithub   = IAuthProviderBase;
-export type IAuthProviderLinkedIn = IAuthProviderBase;
 
 export interface ISecurityConfig {
   secretPattern: string;
@@ -146,8 +144,31 @@ export interface ISecurityConfig {
     expiry: string;
   },
   authProviders: {
-    github: IAuthProviderGithub;
-    linkedin: IAuthProviderLinkedIn;
+    github: IAuthProviderBase;
+    linkedin: IAuthProviderBase;
+  }
+}
+
+export function newGithubConfig(env: IProcessEnv): IAuthProviderBase {
+  return {
+    authUrl: 'https://github.com/login/oauth/authorize',
+    accessTokenUrl: 'https://github.com/login/oauth/access_token',
+    apiBaseUrl: 'https://api.github.com',
+    clientId: env.GITHUB_CLIENT_ID || '', // TODO: warning
+    clientSecret: env.GITHUB_CLIENT_SECRET || '', // TODO: warning
+    redirectUri: env.GITHUB_REDIRECT_URI || '', // TODO: warning
+    scope: 'profile',
+  }
+}
+export function newLinkedInConfig(env: IProcessEnv): IAuthProviderBase {
+  return {
+    authUrl: 'https://www.linkedin.com/oauth/v2/authorization',
+    accessTokenUrl: 'https://www.linkedin.com/oauth/v2/access_token',
+    apiBaseUrl: 'https://api.linkedin.com/v2',
+    clientId: env.LINKEDIN_CLIENT_ID || '', // TODO: warning
+    clientSecret: env.LINKEDIN_CLIENT_SECRET || '', // TODO: warning
+    redirectUri: env.LINKEDIN_REDIRECT_URI || '', // TODO: warning
+    scope: 'r_basicprofile',// 'r_liteprofile',
   }
 }
 
@@ -166,26 +187,16 @@ export function newSecurityConfig(env: IProcessEnv): ISecurityConfig {
       expiry: env.SECURITY_TOKENS_EXPIRY || '1h',
     },
     authProviders: {
-      github: {
-        authUrl: 'https://github.com/login/oauth/authorize',
-        accessTokenUrl: 'https://github.com/login/oauth/access_token',
-        apiBaseUrl: 'https://api.github.com',
-        clientId: env.GITHUB_CLIENT_ID || '', // TODO: warning
-        clientSecret: env.GITHUB_CLIENT_SECRET || '', // TODO: warning
-        redirectUri: env.GITHUB_REDIRECT_URI || '', // TODO: warning
-        scope: 'profile',
-      },
-      linkedin: {
-        authUrl: 'https://www.linkedin.com/oauth/v2/authorization',
-        accessTokenUrl: 'https://www.linkedin.com/oauth/v2/access_token',
-        apiBaseUrl: 'https://api.linkedin.com/v2',
-        clientId: env.LINKEDIN_CLIENT_ID || '', // TODO: warning
-        clientSecret: env.LINKEDIN_CLIENT_SECRET || '', // TODO: warning
-        redirectUri: env.LINKEDIN_REDIRECT_URI || '', // TODO: warning
-        scope: 'r_basicprofile',// 'r_liteprofile',
-      }
-    }
+      github: newGithubConfig(env),
+      linkedin: newLinkedInConfig(env),
+    },
   }
+}
+
+export function getAuthProviderConfig(config: IServerConfig, key: string): IAuthProviderBase {
+  if (key === 'github') return config.security.authProviders.github;
+  if (key === 'linkedin') return config.security.authProviders.linkedin;
+  throw new Error('unknown auth provider');
 }
 
 export interface IServerConfig {

@@ -1,5 +1,5 @@
 import knex from 'knex';
-import { tables } from '../constants';
+import {ITableList, tables} from './constants';
 import { IDbConfig } from './serverConfig';
 
 export interface ITableDefn {
@@ -30,13 +30,20 @@ export interface IQryDeleteOptions extends IQryOptionsBasic {
 
 }
 
-export function newDb(dbConfig: IDbConfig) {
-  const _db = knex(dbConfig);
+export class Db {
 
-  function makeBasicSelector({ name }: ITableDefn) {
+  _db: any;
+  tables: ITableList;
+
+  constructor(dbConfig: IDbConfig) {
+    this._db = knex(dbConfig);
+    this.tables = tables;
+  }
+
+  makeBasicSelector({ name }: ITableDefn) {
     return async (args: IQrySelectOptions) => {
       const { where = '1 = 1', params = [], limit = 100, offset = 0, orderByField = null, orderByDir = 'asc' } = args;
-      const tbl = _db(name);
+      const tbl = this._db(name);
       let qry = tbl.select().whereRaw(where, params);
 
       const counter = await qry.clone().clearSelect().count('*', { as: 'c' });
@@ -57,68 +64,66 @@ export function newDb(dbConfig: IDbConfig) {
     }
   }
 
-  function makeBasicSelectorOne({ name }: ITableDefn) {
+  makeBasicSelectorOne({ name }: ITableDefn) {
     return async (args: IQrySelectOneOptions) => {
       const { where = '1 = 0', params = [] } = args;
-      const tbl = _db(name);
+      const tbl = this._db(name);
       const rows = await tbl.select('*').whereRaw(where, params).limit(1);
       console.log('select one', name, where, params, 'result', rows);
       return rows[0] ? rows[0] : null;
     }
   }
 
-  function makeBasicInserter({ name }: ITableDefn) {
+  makeBasicInserter({ name }: ITableDefn) {
     return async (row: object) => {
-      const tbl = _db(name);
+      const tbl = this._db(name);
       const result = await tbl.insert(row); // do not return data: SQLite3 does not support it
       console.log('insert', name, row, 'result', result);
       return result;
     }
   }
 
-  function makeBasicUpdater({ name }: ITableDefn,) {
+  makeBasicUpdater({ name }: ITableDefn,) {
     return async (row: object, { where, params }: IQryUpdateOptions) => {
-      const tbl = _db(name);
+      const tbl = this._db(name);
       const result = await tbl.update(row).whereRaw(where, params);
       console.log('update', name, row, 'result', result);
       return result;
     }
   }
 
-  function makeBasicDeleter({ name }: ITableDefn) {
+  makeBasicDeleter({ name }: ITableDefn) {
     return async ({ where, params }: IQryDeleteOptions) => {
-      const tbl = _db(name);
+      const tbl = this._db(name);
       const result = await tbl.whereRaw(where, params).del();
       console.log('delete', name, where, params, 'result', result);
       return result;
     }
   }
 
-  function makeBasicRepo(tableDefn: ITableDefn) {
+  makeBasicRepo(tableDefn: ITableDefn) {
     return {
-      create:      makeBasicInserter(tableDefn),
-      retrieve:    makeBasicSelector(tableDefn),
-      retrieveOne: makeBasicSelectorOne(tableDefn),
-      update:      makeBasicUpdater(tableDefn),
-      delete:      makeBasicDeleter(tableDefn),
+      create:      this.makeBasicInserter(tableDefn),
+      retrieve:    this.makeBasicSelector(tableDefn),
+      retrieveOne: this.makeBasicSelectorOne(tableDefn),
+      update:      this.makeBasicUpdater(tableDefn),
+      delete:      this.makeBasicDeleter(tableDefn),
     }
   }
 
-  return {
-    _db,
-    tables,
-    secretRepo:          makeBasicRepo(tables.secret),
-    userRepo:            makeBasicRepo(tables.user),
-    userAchievementRepo: makeBasicRepo(tables.userAchievement),
-    userLanguageRepo:    makeBasicRepo(tables.userLanguage),
-    userPostRepo:        makeBasicRepo(tables.userPost),
-    userProfileRepo:     makeBasicRepo(tables.userProfile),
-    userProjectRepo:     makeBasicRepo(tables.userProject),
-    userSkillRepo:       makeBasicRepo(tables.userSkill),
-    lookupRepo:          makeBasicRepo(tables.sysLookup),
-    assetRepo:           makeBasicRepo(tables.asset),
-    entityAssetRepo:     makeBasicRepo(tables.entityAsset),
-    authConsentRepo:     makeBasicRepo(tables.authConsent),
-    authIdentityRepo:    makeBasicRepo(tables.authIdentity),
-  };
+  secretRepo()          { return this.makeBasicRepo(tables.secret) }
+  authConsentRepo()     { return this.makeBasicRepo(tables.authConsent) }
+  authIdentityRepo()    { return this.makeBasicRepo(tables.authIdentity) }
+  userRepo()            { return this.makeBasicRepo(tables.user) }
+  userEmailRepo()       { return this.makeBasicRepo(tables.userEmail) }
+  userAchievementRepo() { return this.makeBasicRepo(tables.userAchievement) }
+  userLanguageRepo()    { return this.makeBasicRepo(tables.userLanguage) }
+  userPostRepo()        { return this.makeBasicRepo(tables.userPost) }
+  userProfileRepo()     { return this.makeBasicRepo(tables.userProfile) }
+  userProjectRepo()     { return this.makeBasicRepo(tables.userProject) }
+  userSkillRepo()       { return this.makeBasicRepo(tables.userSkill) }
+  lookupRepo()          { return this.makeBasicRepo(tables.sysLookup) }
+  assetRepo()           { return this.makeBasicRepo(tables.asset) }
+  entityAssetRepo()     { return this.makeBasicRepo(tables.entityAsset) }
+
 }

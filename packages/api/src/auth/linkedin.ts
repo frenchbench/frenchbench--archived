@@ -5,7 +5,7 @@ export function newLinkedIn(config: any): IAuthProvider {
   return {
     // step 1: direct user to github
     getAuthorizeUrl: (params) => {
-      const {state, scope = 'r_basicprofile', response_type = 'code'} = params;
+      const { state, scope = 'r_basicprofile', response_type = 'code' } = params;
       // TODO: our app does not permission to request consent for any scopes! :(
       return config.authUrl
         + '?client_id=' + config.clientId
@@ -22,7 +22,7 @@ export function newLinkedIn(config: any): IAuthProvider {
     // step 4: exchange authorization code with access token
     createAccessToken: async (params) => {
       const { state, code } = params;
-      return axios.post<IAuthToken>(
+      const response = await axios.post<IAuthToken>(
         config.accessTokenUrl,
         {
           client_id: config.clientId,
@@ -32,10 +32,12 @@ export function newLinkedIn(config: any): IAuthProvider {
           code,
         }
       );
+      return response.data;
     },
 
     // step 5: get user details using access token
-    getUserDetails: async ({access_token, token_type = 'bearer'}) => {
+    getUserDetails: async (params) => {
+      const { token_type = 'bearer', access_token } = params;
       const response = await axios.get<IUser>(
         config.apiBaseUrl + '/me',
         {

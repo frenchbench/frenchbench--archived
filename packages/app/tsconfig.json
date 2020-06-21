@@ -1,28 +1,28 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "module": "esnext",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
-    "resolveJsonModule": true,
+    "lib": ["dom", "dom.iterable", "esnext"],
     "jsx": "preserve",
     "declarationMap": true,
     "outDir": "dist",
     "rootDir": "src",
-    "removeComments": true,
-    "noEmit": true,
-    "isolatedModules": true
+    "baseUrl": ".",
+    "paths": {
+      "@app/components/*": [ "src/components/*" ],
+      "@app/i18n/*": [ "src/i18n/*" ],
+      "@app/lib/*": [ "src/lib/*" ],
+      "@app/middleware/*": [ "src/middleware/*" ]
+    }
   },
   "exclude": [
     "node_modules"
   ],
   "include": [
     "next-env.d.ts",
-    "src"
+    "src",
+    "**/*.tsx",
+    "**/*.jsx"
   ]
 }

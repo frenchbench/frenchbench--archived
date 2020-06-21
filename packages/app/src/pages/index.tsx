@@ -1,12 +1,12 @@
 import React from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import Layout, { siteTitle } from '../app/Layout';
+import Layout, { siteTitle } from '../components/Layout';
 import utilStyles from '../styles/utils.module.css';
 import { getSortedPageList } from '../pageContent';
-import DateTag from '../app/DateTag';
-import { AppBar } from '../app/AppBar';
-import en from '../app/i18n/en';
+import DateTag from '../components/DateTag';
+import { AppBar } from '../components/AppBar';
+import en from '../i18n/en';
 
 export default function Home({ allPageData }) {
   return (
