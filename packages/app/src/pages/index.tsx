@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import Layout, { siteTitle } from '../components/Layout';
+import Layout from '../components/Layout';
 import utilStyles from '../styles/utils.module.css';
 import { getSortedPageList } from '../pageContent';
 import DateTag from '../components/DateTag';

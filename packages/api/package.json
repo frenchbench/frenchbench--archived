@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "dev": "ts-node ./src/index.ts",
+    "lint": "eslint ./src",
+    "start:dev": "ts-node ./src/index.js",
     "start": "node ./dist/index.js",
     "db:upgrade": "knex migrate:latest --env production",
     "db:upgrade:staging": "knex migrate:latest --env staging",
@@ -35,7 +36,9 @@
     "frenchbench-common": "^1.0.0",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.21.1",
+    "morgan": "^1.10.0",
     "pg": "^8.2.1",
+    "response-time": "^2.3.2",
     "sqlite3": "^4.2.0",
     "uuid": "^8.1.0"
   },
@@ -44,8 +47,22 @@
     "@types/node": "^14.0.6",
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
+    "@typescript-eslint/eslint-plugin": "^3.4.0",
+    "@typescript-eslint/parser": "^3.4.0",
+    "eslint": "^7.3.1",
     "faker": "^4.1.0",
+    "jest": "^26.1.0",
+    "supertest": "^4.0.2",
     "ts-node": "^8.10.2",
     "typescript": "^3.9.3"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/migrations/",
+      "/seeds/"
+    ],
+    "globalSetup": "./jestSetup.js"
   }
 }

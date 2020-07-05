@@ -40,11 +40,14 @@ npm run db:upgrade:dev
 # import random records
 npm run db:seed:dev
 
+# check code style using eslint
+npm run lint
+
 # start
-npm run dev
+npm run start:dev
 
 cd packages/app
-npm run dev
+npm run start:dev
 ```
 
 ## In Staging/test env

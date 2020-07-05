@@ -130,6 +130,7 @@ dist
 # temp folder
 /tmp/
 /packages/api/tmp/
+/packages/api/logs/
 /packages/api/build/
 /packages/api/dist/
 /packages/app/build/

@@ -2,8 +2,9 @@ const tableName = 'tbl_sys_lookup';
 
 exports.up = (knex) => {
   return knex.schema.createTable(tableName, (table) => {
+    table.uuid('id').notNullable().primary();
     table.string('category', 50).notNullable().index();
-    table.string('id', 100).notNullable().index();
+    table.string('value', 100).notNullable().index();
     table.string('label', 100).notNullable();
     table.jsonb('meta').notNullable().defaultTo('{}');
 
@@ -12,7 +13,7 @@ exports.up = (knex) => {
     table.uuid('created_by').nullable();
     table.uuid('updated_by').nullable();
 
-    table.primary(['category', 'id']);
+    table.unique(['category', 'value']);
   });
 };
 

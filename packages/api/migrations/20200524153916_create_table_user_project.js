@@ -20,6 +20,8 @@ exports.up = (knex) => {
     table.timestamp('updated_at', { useTz: true }).notNullable();
     table.uuid('created_by').nullable();
     table.uuid('updated_by').nullable();
+
+    table.index(['user_id', 'order_idx']);
   });
 };
 
