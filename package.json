@@ -4,7 +4,9 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "tsc -b packages/common packages/api packages/app"
+    "clean:all": "lerna run clean",
+    "build:composite:ts": "npx tsc -b packages/frenchbench-common packages/frenchbench-api packages/frenchbench-app",
+    "build": "yarn run clean:all && yarn run build:composite:ts"
   },
   "name": "frenchbench-app",
   "devDependencies": {

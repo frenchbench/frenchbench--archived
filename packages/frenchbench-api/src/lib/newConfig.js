@@ -1,8 +1,6 @@
 import { dbConnectionConfig } from './dbConnectionConfig';
 
-export function newConfig(process) {
-  const pe = process.env;
-  const cwd = process.cwd();
+export function newConfig(pe, cwd) {
   return {
     version: 'v1.0.0',
     http: {
@@ -26,6 +24,9 @@ export function newConfig(process) {
       seeds: {
         directory: cwd + '/seeds',
       },
+    },
+    gql: {
+      schemaFile: cwd + '/schema.graphql',
     },
   };
 }

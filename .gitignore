@@ -129,12 +129,17 @@ dist
 
 # temp folder
 /tmp/
-/packages/api/tmp/
-/packages/api/logs/
-/packages/api/build/
-/packages/api/dist/
-/packages/app/build/
-/packages/app/dist/
-/packages/common/lib/
-/packages/common/dist/
-/packages/common/build/
+
+/packages/frenchbench-api/tmp/
+/packages/frenchbench-api/logs/
+/packages/frenchbench-api/build/
+/packages/frenchbench-api/dist/
+
+/packages/frenchbench-app/build/
+/packages/frenchbench-app/dist/
+
+/packages/frenchbench-common/lib/
+/packages/frenchbench-common/dist/
+/packages/frenchbench-common/build/
+
+tsconfig.tsbuildinfo
