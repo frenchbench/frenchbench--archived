@@ -1,0 +1,77 @@
+type Error {
+  name: String!
+  message: String!
+}
+
+type User {
+  id: ID!
+  username: ID!
+}
+
+type UserProfile {
+  id: ID!
+  user_id: ID!
+  first_name: String
+  middle_name: String
+  last_name: String
+  job_title: String
+  organisation: String
+  industry: String
+  city: String
+  country: String
+  dob_year: Int
+  min_salary: Int
+  summary: String
+  created_at: String #GQLDateTime!
+  updated_at: String #GQLDateTime!
+  created_by: ID
+  updated_by: ID
+}
+
+type UserProfileList {
+  items: [UserProfile!]!
+}
+
+type Reader {
+  currentUser: User
+  user(username: ID!): User!
+  userProfile(username: ID!): UserProfile!
+  userProfiles(filters: String): UserProfileList!
+}
+
+input UserProfileInput {
+  first_name: String
+}
+
+input RegisterInput {
+  username: ID!
+  password: String!
+}
+
+type RegisterOutput {
+  userId: ID!
+  token: String!
+}
+
+input LoginInput {
+  username: ID!
+  password: String!
+}
+
+type LoginOutput {
+  token: String!
+}
+
+type Writer {
+  register(data: RegisterInput!): RegisterOutput!
+  login(data: LoginInput): LoginOutput!
+  updateUserProfile(data: UserProfileInput): Boolean!
+}
+
+type Query {
+  reader(options: String): Reader!
+}
+
+type Mutation {
+  writer(options: String): Writer!
+}

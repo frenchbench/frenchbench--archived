@@ -38,8 +38,8 @@ bower_components
 build/Release
 
 # Dependency directories
-node_modules/
-jspm_packages/
+node_modules
+jspm_packages
 
 # TypeScript v1 declaration files
 typings/
@@ -129,3 +129,17 @@ dist
 
 # temp folder
 /tmp/
+
+/packages/frenchbench-api/tmp/
+/packages/frenchbench-api/logs/
+/packages/frenchbench-api/build/
+/packages/frenchbench-api/dist/
+
+/packages/frenchbench-app/build/
+/packages/frenchbench-app/dist/
+
+/packages/frenchbench-common/lib/
+/packages/frenchbench-common/dist/
+/packages/frenchbench-common/build/
+
+tsconfig.tsbuildinfo

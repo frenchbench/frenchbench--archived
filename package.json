@@ -1,49 +1,15 @@
 {
-  "name": "frenchbench-app",
-  "version": "1.0.0",
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "db:upgrade": "knex migrate:latest --env production",
-    "db:upgrade:staging": "knex migrate:latest --env staging",
-    "db:upgrade:dev": "knex migrate:latest",
-    "db:upgrade:next": "knex migrate:up --env production",
-    "db:upgrade:next:staging": "knex migrate:up --env staging",
-    "db:upgrade:next:dev": "knex migrate:up",
-    "db:rollback": "knex migrate:rollback --all --env production",
-    "db:rollback:staging": "knex migrate:rollback --all --env staging",
-    "db:rollback:dev": "knex migrate:rollback --all",
-    "db:rollback:last": "knex migrate:down --env production",
-    "db:rollback:last:staging": "knex migrate:down --env staging",
-    "db:rollback:last:dev": "knex migrate:down",
-    "db:seed:dev": "knex seed:run"
+    "clean:all": "lerna run clean",
+    "build:composite:ts": "npx tsc -b packages/frenchbench-common packages/frenchbench-api packages/frenchbench-app",
+    "build": "yarn run clean:all && yarn run build:composite:ts"
   },
-  "dependencies": {
-    "axios": "^0.19.2",
-    "bcrypt": "^4.0.1",
-    "cors": "^2.8.5",
-    "date-fns": "^2.14.0",
-    "dotenv": "^8.2.0",
-    "gray-matter": "^4.0.2",
-    "jsonwebtoken": "^8.5.1",
-    "knex": "^0.21.1",
-    "next": "9.4.2",
-    "pg": "^8.2.1",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
-    "remark": "^12.0.0",
-    "remark-html": "^11.0.2",
-    "sqlite3": "^4.2.0",
-    "uuid": "^8.1.0"
-  },
+  "name": "frenchbench-app",
   "devDependencies": {
-    "@types/node": "^14.0.6",
-    "@types/react": "^16.9.35",
-    "@types/react-dom": "^16.9.8",
-    "faker": "^4.1.0",
-    "ts-node": "^8.10.2",
-    "typescript": "^3.9.3"
+    "lerna": "^3.22.1"
   }
 }
