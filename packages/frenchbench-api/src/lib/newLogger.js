@@ -1,13 +1,12 @@
 import morgan from 'morgan';
 import fs from 'fs';
-import path from 'path';
 
-export function newLogger({ loggerConfig }) {
-  const { file, consoleOn } = loggerConfig;
+export function newLogger({ expressApp, config }) {
+  const { file, consoleOn } = config.logger;
   // create a write stream (in append mode)
   const accessLogStream = fs.createWriteStream(file, { flags: 'a' });
   const logger = morgan('combined', { stream: accessLogStream });
-  return {
+  const loggerExt = {
     logger,
     info: (...args) => {
       if (consoleOn) {
@@ -20,4 +19,6 @@ export function newLogger({ loggerConfig }) {
       }
     },
   };
+  expressApp.set('logger', loggerExt);
+  return loggerExt;
 }

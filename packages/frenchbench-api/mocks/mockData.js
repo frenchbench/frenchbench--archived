@@ -125,7 +125,7 @@ function randUserSkill(user, { order_idx }){
   }
 }
 
-function randUserPost(user){
+function randUserPost(user, options = {}){
   const id = faker.random.uuid();
   const title = faker.lorem.sentence();
   return {
@@ -142,7 +142,7 @@ function randUserPost(user){
   }
 }
 
-function randUserEmail(user){
+function randUserEmail(user, options = {}){
   const id = faker.random.uuid();
   return {
     id,
@@ -155,7 +155,7 @@ function randUserEmail(user){
   }
 }
 
-async function randUser(){
+async function randUser(options = {}){
   const id = faker.random.uuid();
   const username = faker.internet.userName().toLowerCase();
   const password_hash = await passwordHash(faker.internet.password());

@@ -1,6 +1,6 @@
 export * from './baseController';
 export * from './dbFilters';
-export * from './newConfig';
+export * from '../simple/newConfig';
 export * from './newDbAdapter';
 export * from './newDbAdapterFb';
 export * from './newGraphQL';

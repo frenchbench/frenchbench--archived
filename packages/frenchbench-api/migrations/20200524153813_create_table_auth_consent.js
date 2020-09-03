@@ -1,7 +1,7 @@
-const tableName = 'tbl_auth_consent';
+import { TBL_AUTH_CONSENT } from '../src/constants';
 
-exports.up = (knex) => {
-  return knex.schema.createTable(tableName, (table) => {
+export const up = knex => {
+  return knex.schema.createTable(TBL_AUTH_CONSENT, (table) => {
     table.uuid('id').notNullable().primary();
     table.string('provider_id', 10).notNullable(); // 'linkedin'
     table.text('scope').notNullable();
@@ -16,6 +16,6 @@ exports.up = (knex) => {
   });
 };
 
-exports.down = (knex) => {
-  return knex.schema.dropTable(tableName);
+export const down = knex => {
+  return knex.schema.dropTable(TBL_AUTH_CONSENT);
 };

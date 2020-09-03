@@ -1,11 +1,11 @@
-const tableName = 'tbl_user_email';
+import { TBL_USER, TBL_USER_EMAIL } from '../src/constants';
 
-exports.up = (knex) => {
-  return knex.schema.createTable(tableName, (table) => {
+export const up = knex => {
+  return knex.schema.createTable(TBL_USER_EMAIL, (table) => {
     table.uuid('id').notNullable().primary();
 
     table.uuid('user_id').notNullable().index()
-      .references('id').inTable('user')
+      .references('id').inTable(TBL_USER)
       .onDelete('cascade');
 
     table.string('email', 100).notNullable().unique();
@@ -17,6 +17,6 @@ exports.up = (knex) => {
   });
 };
 
-exports.down = (knex) => {
-  return knex.schema.dropTable(tableName);
+export const down = knex => {
+  return knex.schema.dropTable(TBL_USER_EMAIL);
 };

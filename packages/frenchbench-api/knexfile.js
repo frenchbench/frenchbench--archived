@@ -15,11 +15,14 @@ function newDbConfig(env){
 
   switch (client) {
     case DB_CLIENT_PG:
-      connection = env.PG_CONNECTION_STRING;
+      connection = {
+        host: env.PGHOST || '127.0.0.1',
+        port: env.PGPORT || 5432,
+        user: env.PGUSER,
+        password: env.PGPASSWORD,
+        database: env.PGDATABASE,
+      };
       moreOptions = {};
-      break;
-    case DB_CLIENT_SQLITE3:
-      connection = env.SQLITE_FILE;
       break;
     case DB_CLIENT_MYSQL:
       connection = {
@@ -31,6 +34,9 @@ function newDbConfig(env){
       };
       moreOptions = {};
       break;
+    case DB_CLIENT_SQLITE3:
+      connection = env.SQLITE_FILE;
+      break;
     default:
       console.warn('invalid db client', client);
   }
@@ -38,18 +44,22 @@ function newDbConfig(env){
   return {
     client,
     connection,
-    migrations: {
-      tableName: 'knex_migrations',
-    },
     pool,
     useNullAsDefault: true,
     acquireConnectionTimeout: 10000, // 10 seconds
+    migrations: {
+      tableName: 'knex_migrations',
+      directory: './migrations',
+    },
+    seeds: {
+      directory: './seeds',
+    },
     ...moreOptions,
   };
 }
 
 module.exports = {
   development: newDbConfig(process.env),
-  staging: newDbConfig(process.env),
-  production: newDbConfig(process.env),
+  staging:     newDbConfig(process.env),
+  production:  newDbConfig(process.env),
 };

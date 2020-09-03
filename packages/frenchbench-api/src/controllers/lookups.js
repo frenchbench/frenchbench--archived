@@ -7,6 +7,6 @@ export function lookups({ config, logger, dbAdapterFb }) {
     logger,
     dbAdapter: dbAdapterFb,
     tableName: constants.TBL_LOOKUP,
-    route: constants.RUT_LOOKUPS,
+    route: constants.RUT_LOOKUP,
   });
 }

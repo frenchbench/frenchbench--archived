@@ -1,7 +1,7 @@
-const tableName = 'tbl_asset';
+import { TBL_ASSET } from '../src/constants';
 
-exports.up = (knex) => {
-  return knex.schema.createTable(tableName, (table) => {
+export const up = knex => {
+  return knex.schema.createTable(TBL_ASSET, (table) => {
     table.uuid('id').notNullable().primary();
     table.string('asset_type', 50).notNullable();
     table.string('media_type', 50).notNullable();
@@ -16,6 +16,6 @@ exports.up = (knex) => {
   });
 };
 
-exports.down = (knex) => {
-  return knex.schema.dropTable(tableName);
+export const down = knex => {
+  return knex.schema.dropTable(TBL_ASSET);
 };

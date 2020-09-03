@@ -1,12 +1,10 @@
-const { randNum, randUserSkill, chainPromises } = require('../mockData');
+const { TBL_USER, TBL_USER_SKILL } = require('../src/constants');
+const { randNum, randUserSkill, chainPromises } = require('../mocks/mockData');
 
-const tblUser = 'tbl_user';
-const tblUserSkill = 'tbl_user_skill';
-
-exports.seed = function(knex) {
+export const seed = knex => {
 
   async function insertUserSkill(skill) {
-    return knex(tblUserSkill).insert(skill);
+    return knex(TBL_USER_SKILL).insert(skill);
   }
 
   async function insertSkillsForUser(user) {
@@ -19,9 +17,9 @@ exports.seed = function(knex) {
     return chainPromises(skills, insertUserSkill);
   }
 
-  return knex(tblUserSkill).del()
-    .then(async () => {
-      const users = await knex(tblUser).select();
+  return knex(TBL_USER_SKILL).del()
+                             .then(async () => {
+      const users = await knex(TBL_USER).select();
       return chainPromises(users, insertSkillsForUser);
     });
 };

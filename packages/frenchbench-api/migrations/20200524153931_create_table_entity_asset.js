@@ -1,14 +1,14 @@
-const tableName = 'tbl_entity_asset';
+import { TBL_ASSET, TBL_ENTITY_ASSET } from '../src/constants';
 
-exports.up = (knex) => {
-  return knex.schema.createTable(tableName, (table) => {
+export const up = knex => {
+  return knex.schema.createTable(TBL_ENTITY_ASSET, (table) => {
     table.uuid('id').notNullable().primary();
 
     table.string('parent_entity_kind', 20).notNullable().index();
     table.uuid('parent_entity_id').notNullable().index();
 
     table.uuid('asset_id').notNullable().index()
-      .references('id').inTable('asset')
+      .references('id').inTable(TBL_ASSET)
       .onDelete('cascade');
 
     table.jsonb('meta').notNullable().defaultTo('{}');
@@ -22,6 +22,6 @@ exports.up = (knex) => {
   });
 };
 
-exports.down = (knex) => {
-  return knex.schema.dropTable(tableName);
+export const down = knex => {
+  return knex.schema.dropTable(TBL_ENTITY_ASSET);
 };

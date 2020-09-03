@@ -1,7 +1,7 @@
-const tableName = 'tbl_sys_lookup';
+import { TBL_LOOKUP } from '../src/constants';
 
-exports.up = (knex) => {
-  return knex.schema.createTable(tableName, (table) => {
+export const up = knex => {
+  return knex.schema.createTable(TBL_LOOKUP, (table) => {
     table.uuid('id').notNullable().primary();
     table.string('category', 50).notNullable().index();
     table.string('value', 100).notNullable().index();
@@ -17,6 +17,6 @@ exports.up = (knex) => {
   });
 };
 
-exports.down = (knex) => {
-  return knex.schema.dropTable(tableName);
+export const down = knex => {
+  return knex.schema.dropTable(TBL_LOOKUP);
 };
