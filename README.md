@@ -1,6 +1,6 @@
-# frenchbench-app
+# FrenchBench
 
-FrenchBench intelligent team builder App and API using:
+FrenchBench App and API using:
 
 * Node.js v12
 * React.js
