@@ -1,22 +1,22 @@
 import express from 'express';
 import responseTime from 'response-time';
-import { assignId, authToken } from '../middlewares';
+import { assignId, authToken, initSessionMiddleware } from '../middlewares';
 
-export function newHttpApp({ httpConfig, logger, dbAdapterFb }) {
-  const { port } = httpConfig;
+export function newHttpApp({ expressApp, config, logger, dbAdapterFb }) {
+  const { port } = config.http;
 
-  // express http server
-  const expApp = express();
+  expressApp.set('x-powered-by', false);
 
-  expApp.use(logger.logger); // access log
-  expApp.use(responseTime());
-  expApp.use(assignId({ logger }));
-  expApp.use(authToken({ logger }));
-  expApp.use(express.json());// for parsing application/json
-  expApp.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+  expressApp.use(logger.logger); // access log
+  expressApp.use(responseTime());
+  expressApp.use(assignId({ logger }));
+  expressApp.use(initSessionMiddleware({ config, logger, dbAdapterFb }));
+  expressApp.use(authToken({ logger }));
+  expressApp.use(express.json()); // for parsing application/json
+  expressApp.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
   function server() {
-    return expApp;
+    return expressApp;
   }
 
   function newRouter(){
@@ -24,11 +24,11 @@ export function newHttpApp({ httpConfig, logger, dbAdapterFb }) {
   }
 
   const listen = (onListen) => {
-    expApp.listen(port, onListen);
+    expressApp.listen(port, onListen);
   };
 
   return {
-    httpConfig,
+    config,
     logger,
     dbAdapterFb,
     server, // 1 new server

@@ -1,9 +1,11 @@
-require('dotenv').config();
-const express = require('express');
-const next = require('next');
-const cookieParser = require('cookie-parser');
-const proxyMiddleware = require('http-proxy-middleware');
-const { newServerConfig } = require('./serverConfig');
+import dotenv from 'dotenv'
+import express from 'express';
+import next from 'next';
+import cookieParser from 'cookie-parser';
+import { createProxyMiddleware } from 'http-proxy-middleware';
+import { newServerConfig } from './serverConfig';
+
+dotenv.config();
 
 const serverConfig = newServerConfig(process.env);
 const { port, env, isDevMode, proxyConfig } = serverConfig;
@@ -25,7 +27,7 @@ app
 
     // attach api proxy middleware
     Object.keys(proxyConfig).forEach(context => {
-      server.use(proxyMiddleware(context, proxyConfig[context]));
+      server.use(createProxyMiddleware(context, proxyConfig[context]));
     });
 
     // Default catch-all handler to allow Next.js to handle all other routes

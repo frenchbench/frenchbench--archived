@@ -1,7 +1,7 @@
-const tableName = 'tbl_user';
+import { TBL_USER } from '../src/constants';
 
-exports.up = (knex) => {
-  return knex.schema.createTable(tableName, (table) => {
+export const up = knex => {
+  return knex.schema.createTable(TBL_USER, (table) => {
     table.uuid('id').notNullable().primary();
     table.string('username', 50).notNullable().unique();
     table.text('password_hash').notNullable();
@@ -13,6 +13,6 @@ exports.up = (knex) => {
   });
 };
 
-exports.down = (knex) => {
-  return knex.schema.dropTable(tableName);
+export const down = knex => {
+  return knex.schema.dropTable(TBL_USER);
 };

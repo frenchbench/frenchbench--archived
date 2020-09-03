@@ -7,6 +7,6 @@ export function entityAssets({ config, logger, dbAdapterFb }) {
     logger,
     dbAdapter: dbAdapterFb,
     tableName: constants.TBL_ENTITY_ASSET,
-    route: constants.RUT_ENTITY_ASSETS,
+    route: constants.RUT_ENTITY_ASSET,
   });
 }

@@ -1,7 +1,7 @@
-const tableName = 'tbl_auth_identity';
+import { TBL_AUTH_IDENTITY } from '../src/constants';
 
-exports.up = (knex) => {
-  return knex.schema.createTable(tableName, (table) => {
+export const up = knex => {
+  return knex.schema.createTable(TBL_AUTH_IDENTITY, (table) => {
     table.uuid('id').notNullable().primary();
 
     table.string('provider_id', 20).notNullable();
@@ -15,6 +15,6 @@ exports.up = (knex) => {
   });
 };
 
-exports.down = (knex) => {
-  return knex.schema.dropTable(tableName);
+export const down = knex => {
+  return knex.schema.dropTable(TBL_AUTH_IDENTITY);
 };

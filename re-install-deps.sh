@@ -14,7 +14,6 @@ lerna add -D eslint --scope frenchbench-common
 # api dep
 lerna add axios --scope frenchbench-api
 lerna add bcrypt --scope frenchbench-api
-lerna add cookie --scope frenchbench-api
 lerna add cors --scope frenchbench-api
 lerna add dataloader --scope frenchbench-api
 lerna add date-fns --scope frenchbench-api
@@ -22,6 +21,8 @@ lerna add dotenv --scope frenchbench-api
 lerna add express --scope frenchbench-api
 lerna add graphql --scope frenchbench-api
 lerna add express-graphql --scope frenchbench-api
+lerna add express-session --scope frenchbench-api
+lerna add connect-session-knex --scope frenchbench-api
 lerna add jsonwebtoken --scope frenchbench-api
 lerna add pg --scope frenchbench-api
 lerna add sqlite3 --scope frenchbench-api

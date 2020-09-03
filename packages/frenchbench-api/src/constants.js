@@ -1,25 +1,23 @@
-import { makeGenericFilter } from './lib/dbFilters';
-
 // table names in the database
 // protected
-export const TBL_AUTH_CONSENT     = 'tbl_auth_consent';
-export const TBL_AUTH_IDENTITY    = 'tbl_auth_identity';
-export const TBL_SECRET           = 'tbl_secret';
-export const TBL_USER             = 'tbl_user';
+export const TBL_AUTH_CONSENT  = 'auth_consents';
+export const TBL_AUTH_IDENTITY = 'auth_identities';
+export const TBL_SECRET        = 'secrets';
+export const TBL_USER          = 'users';
 
 // public
-export const TBL_ASSET            = 'tbl_asset';
-export const TBL_ENTITY_ASSET     = 'tbl_entity_asset';
-export const TBL_LOOKUP           = 'tbl_sys_lookup';
-export const TBL_USER_ACHIEVEMENT = 'tbl_user_achievement';
-export const TBL_USER_EMAIL       = 'tbl_user_email';
-export const TBL_USER_LANGUAGE    = 'tbl_user_language';
-export const TBL_USER_POST        = 'tbl_user_post';
-export const TBL_USER_PROFILE     = 'tbl_user_profile';
-export const TBL_USER_PROJECT     = 'tbl_user_project';
-export const TBL_USER_SKILL       = 'tbl_user_skill';
+export const TBL_ASSET            = 'assets';
+export const TBL_ENTITY_ASSET     = 'entities_assets';
+export const TBL_LOOKUP           = 'lookups';
+export const TBL_USER_ACHIEVEMENT = 'users_achievements';
+export const TBL_USER_EMAIL       = 'users_emails';
+export const TBL_USER_LANGUAGE    = 'users_languages';
+export const TBL_USER_POST        = 'users_posts';
+export const TBL_USER_PROFILE     = 'users_profiles';
+export const TBL_USER_PROJECT     = 'users_projects';
+export const TBL_USER_SKILL       = 'users_skills';
 
-export const fields = {
+export const tablesFields = {
   [TBL_ASSET]:            ['id', 'asset_type', 'media_type', 'label', 'url', 'meta', 'created_at', 'updated_at', 'created_by', 'updated_by'],
   [TBL_AUTH_CONSENT]:     ['id', 'provider_id', 'scope', 'auth_code', 'grant_type', 'access_token', 'refresh_token', 'expires_at', 'created_at', 'updated_at'],
   [TBL_AUTH_IDENTITY]:    ['id', 'provider_id', 'external_username', 'meta', 'created_by', 'updated_by'],
@@ -36,52 +34,19 @@ export const fields = {
   [TBL_USER_SKILL]:       ['id', 'user_id', 'skill', 'stars', 'order_idx', 'created_at', 'updated_at', 'created_by', 'updated_by'],
 };
 
-// applicable for public controllers
-export const filters = {
-  [TBL_ENTITY_ASSET]: [
-    makeGenericFilter('parent_entity_id'),
-    makeGenericFilter('asset_id'),
-  ],
-  [TBL_LOOKUP]: [
-    makeGenericFilter('category'),
-    makeGenericFilter('value'),
-    makeGenericFilter('label'),
-  ],
-  [TBL_USER_ACHIEVEMENT]: [
-    makeGenericFilter('user_id'),
-  ],
-  [TBL_USER_LANGUAGE]: [
-    makeGenericFilter('user_id'),
-  ],
-  [TBL_USER_PROFILE]: [
-    makeGenericFilter('user_id'),
-  ],
-  [TBL_USER_PROJECT]: [
-    makeGenericFilter('user_id'),
-  ],
-  [TBL_USER_SKILL]: [
-    makeGenericFilter('user_id'),
-    makeGenericFilter('skill'),
-  ],
-  [TBL_USER_POST]: [
-    makeGenericFilter('user_id'),
-    makeGenericFilter('tags'), // TODO special filter needed
-  ],
-};
-
 // standard http routes
-export const RUT_ASSETS        = '/assets'; // file upload/download is needed
-export const RUT_ENTITY_ASSETS = '/entity-assets';
-export const RUT_LOOKUPS       = '/lookups';
-export const RUT_USERS         = '/users';
+export const RUT_ASSET        = '/asset'; // file upload/download is needed
+export const RUT_ENTITY_ASSET = '/entity-asset';
+export const RUT_LOOKUP       = '/lookup';
+export const RUT_USER         = '/user';
 
 // child routes
-export const RUT_USERS_ACHIEVEMENTS = '/users/:userId/achievements';
-export const RUT_USERS_LANGUAGES    = '/users/:userId/languages';
-export const RUT_USERS_POSTS        = '/users/:userId/posts';
-export const RUT_USERS_PROFILE      = '/users/:userId/profile';
-export const RUT_USERS_PROJECTS     = '/users/:userId/projects';
-export const RUT_USERS_SKILLS       = '/users/:userId/skills';
+export const RUT_USERS_ACHIEVEMENT = '/user/:userId/achievement';
+export const RUT_USERS_LANGUAGE    = '/user/:userId/language';
+export const RUT_USERS_POST        = '/user/:userId/post';
+export const RUT_USERS_PROFILE     = '/user/:userId/profile';
+export const RUT_USERS_PROJECT     = '/user/:userId/project';
+export const RUT_USERS_SKILL       = '/user/:userId/skill';
 
 // special http routes
 export const RUT_AUTH                       = '/auth';
@@ -91,8 +56,8 @@ export const RUT_AUTH_PROVIDER_AUTHENTICATE = '/auth/:provider/authenticate';
 export const RUT_AUTH_PROVIDER_ME           = '/auth/:provider/me';
 export const RUT_AUTH_PROVIDER_REGISTER     = '/auth/:provider/register';
 export const RUT_AUTH_PROVIDER_AUTHORIZE    = '/auth/:provider/authorize';
-export const RUT_ENTITIES_KIND_ID           = '/entities/:kind/:id';
-export const RUT_ENTITIES_KIND_ID_ASSETS    = '/entities/:kind/:id/assets';
+export const RUT_ENTITIES_KIND_ID           = '/entity/:kind/:id';
+export const RUT_ENTITIES_KIND_ID_ASSET     = '/entity/:kind/:id/asset';
 
 export const ERRORS = {
   PASSWORDS_NOT_SAME: 'passwords are not same',

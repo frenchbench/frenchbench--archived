@@ -1,34 +1,34 @@
 import knex from 'knex';
 
-export function newDbAdapter({ dbConfig, logger }) {
+export function newDbAdapter({ expressApp, config, logger }) {
   logger.info('new db...');
-  const db = knex(dbConfig);
+  const db = knex(config.db);
   logger.info('new db... ready');
 
   /**
    * Run a raw SQL command
-   * @param {string} sql e.g. 'select * from users where id = ?',
-   * @param {array} params e.g. [ 'uuid' ]
-   * @returns {any}
+   * @param {String} sql    e.g. 'select * from users where id = ?'
+   * @param {Array} params  e.g. [ 'uuid' ]
+   * @returns {Promise<any>}
    */
-  const query      = (sql, params) => db.raw(sql, params);
-  const select     = (tableName, fields = '*') => db.select(fields).from(tableName);
-  const insert     = (tableName, row) => db(tableName).insert(row);
-  const findOne    = (tableName, { field, value }) => db(tableName).where(field, value).first();
-  const findMany   = (tableName, { field, value }) => db(tableName).where(field, value).select();
-  const update     = (tableName, { field, value }, changes) => db(tableName).where(field, value).update(changes);
-  const deleteMany = (tableName, { field, value }) => db(tableName).where(field, value).del();
+  const query      = async (sql, params) => db.raw(sql, params);
+  const select     = async (tableName, fields = '*') => db.select(fields).from(tableName);
+  const insert     = async (tableName, row) => db(tableName).insert(row);
+  const findOne    = async (tableName, { field, value }) => db(tableName).where(field, value).first();
+  const findMany   = async (tableName, { field, value }) => db(tableName).where(field, value).select();
+  const update     = async (tableName, { field, value }, changes) => db(tableName).where(field, value).update(changes);
+  const deleteMany = async (tableName, { field, value }) => db(tableName).where(field, value).del();
 
   const table = (tableName) => ({
-    select: (fields = '*') => select(tableName, fields),
-    insert: (row) => insert(tableName, row),
-    findOne: (field, value) => findOne(tableName, { field, value }),
-    findMany: (field, value) => findMany(tableName, { field, value }),
-    update: (field, value, changes) => update(tableName, { field, value }, changes),
-    deleteMany: (field, value) => deleteMany(tableName, { field, value }),
+    select:     async (fields = '*') => select(tableName, fields),
+    insert:     async (row) => insert(tableName, row),
+    findOne:    async (field, value) => findOne(tableName, { field, value }),
+    findMany:   async (field, value) => findMany(tableName, { field, value }),
+    update:     async (field, value, changes) => update(tableName, { field, value }, changes),
+    deleteMany: async (field, value) => deleteMany(tableName, { field, value }),
   });
 
-  return {
+  const dbAdapter = {
     db,
     query,
     table,
@@ -39,4 +39,6 @@ export function newDbAdapter({ dbConfig, logger }) {
     update,
     deleteMany,
   };
+  expressApp.set('dbAdapter', dbAdapter);
+  return dbAdapter;
 }

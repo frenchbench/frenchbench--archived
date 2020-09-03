@@ -1,7 +1,7 @@
 import * as constants from '../constants';
 
 // create new DbAdapter for FrenchBench
-export function newDbAdapterFb({ dbAdapter }) {
+export function newDbAdapterFb({ expressApp, config, logger, dbAdapter }) {
 
   // selectors with explicit table names
   const assets            = () => dbAdapter.table(constants.TBL_ASSET);
@@ -19,7 +19,7 @@ export function newDbAdapterFb({ dbAdapter }) {
   const usersProjects     = () => dbAdapter.table(constants.TBL_USER_PROJECT);
   const usersSkills       = () => dbAdapter.table(constants.TBL_USER_SKILL);
 
-  return {
+  const dbAdapterFb = {
     ...dbAdapter,
     assets,
     authConsents,
@@ -36,4 +36,6 @@ export function newDbAdapterFb({ dbAdapter }) {
     usersProjects,
     usersSkills,
   };
+  expressApp.set('dbAdapterFb', dbAdapterFb);
+  return dbAdapterFb;
 }

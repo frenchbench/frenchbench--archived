@@ -7,6 +7,6 @@ export function assets({ config, logger, dbAdapterFb }) {
     logger,
     dbAdapter: dbAdapterFb,
     tableName: constants.TBL_ASSET,
-    route: constants.RUT_ASSETS,
+    route: constants.RUT_ASSET,
   });
 }

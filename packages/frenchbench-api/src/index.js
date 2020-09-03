@@ -1,11 +1,25 @@
-require('dotenv').config(); // read .env file
-import { boot } from './boot';
+import http from 'http';
+import dotenv from 'dotenv';
+import { bootSimple } from './bootSimple';
 
-// override any process.env settings/props
+dotenv.config(); // read .env file
 
-// then boot HTTP app
-const httpApp = boot();
+const expressApp = bootSimple({ penv: process.env, cwd: process.cwd() });
+const config = expressApp.get('config');
 
-httpApp.listen(() => {
-  console.info(`FrenchBench API is ready at http://localhost:${httpApp.httpConfig.port}!`);
+const server = http.createServer(expressApp);
+
+server.listen(config.http.port,() => {
+  const host = `http://localhost:${config.http.port}`;
+  console.info(`FrenchBench API is ready at ${host}!`);
 });
+
+// shutdown
+process.on('SIGTERM', () => {
+  console.debug('SIGTERM signal received: closing HTTP server');
+  server.close(() => {
+    console.debug('HTTP server closed');
+  });
+});
+
+export default {};

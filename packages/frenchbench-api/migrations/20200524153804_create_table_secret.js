@@ -1,7 +1,7 @@
-const tableName = 'tbl_secret';
+import { TBL_SECRET } from '../src/constants';
 
-exports.up = (knex) => {
-  return knex.schema.createTable(tableName, (table) => {
+export const up = knex => {
+  return knex.schema.createTable(TBL_SECRET, (table) => {
     table.uuid('id').notNullable().primary();
     table.timestamp('created_at', { useTz: true, precision: 3 }).notNullable();
     table.string('secret', 20).notNullable();
@@ -10,6 +10,6 @@ exports.up = (knex) => {
   });
 };
 
-exports.down = (knex) => {
-  return knex.schema.dropTable(tableName);
+export const down = knex => {
+  return knex.schema.dropTable(TBL_SECRET);
 };
