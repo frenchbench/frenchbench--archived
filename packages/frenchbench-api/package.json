@@ -42,7 +42,7 @@
     "frenchbench-common": "^1.0.0",
     "graphql": "^15.3.0",
     "jsonwebtoken": "^9.0.0",
-    "knex": "^0.21.2",
+    "knex": "^2.4.0",
     "morgan": "^1.10.0",
     "pg": "^8.3.0",
     "response-time": "^2.3.2",
