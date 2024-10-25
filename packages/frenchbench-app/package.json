@@ -20,7 +20,7 @@
     "express": "^4.17.1",
     "frenchbench-common": "^1.0.0",
     "gray-matter": "^4.0.2",
-    "http-proxy-middleware": "^1.0.5",
+    "http-proxy-middleware": "^2.0.7",
     "js-cookie": "^2.2.1",
     "next": "^14.1.1",
     "next-connect": "^0.8.1",
